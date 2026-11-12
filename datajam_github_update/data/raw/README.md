@@ -1,1 +1,0 @@
-Place the original listings.csv, calendar.csv, and reviews.csv files here locally. Do not commit raw files to GitHub because they may contain identifying information. The .gitignore file excludes all files in this folder.
