@@ -55,6 +55,14 @@ Notes for your laptop:
 - It takes about 1 to 3 minutes. Text scrolls past. When you can type again, it worked.
 - Mac: python3 code/ddd_analysis.py --data-dir . --out-dir results
 
+### Step 6b. Verify the data first (recommended, 1 minute)
+Before or after Step 6, run this to prove the files are the right city and are clean:
+
+    python code\verify_data.py --data-dir "." --out-dir results
+
+You should see about 18 PASS, 3 WARN and 0 FAIL, ending with "DATA OK TO USE". The 3 WARN lines are normal (snapshot date is not June 15, 15.8% of listings have no price, 13% sit at the 255 night cap), so mention them as data limitations. A FAIL means stop: for example the wrong city or the small summary file. It also checks that your numbers match ours (6,131 listings, 2,702 in the analysis set, $9,535,818 for the 13 condos). A report is saved in results\verification_report.csv.
+
+
 ### Step 7. Check your numbers match (this is your proof it is correct)
 Scroll up in the black window and look for these lines. They should be the same or within about 0.1 point on the simulated ones:
 
