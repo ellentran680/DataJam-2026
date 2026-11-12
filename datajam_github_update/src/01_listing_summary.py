@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-INPUT = ROOT / "data" / "raw" / "listings.csv"
+INPUT = ROOT / "data" / "raw" / "listings.csv.gz"
 OUTPUT = ROOT / "outputs"
 OUTPUT.mkdir(parents=True, exist_ok=True)
 
@@ -39,8 +39,8 @@ def main() -> None:
     print(df.columns.tolist())
 
     required = [
-    "neighbourhood",
-    "neighbourhood_group",
+    "neighbourhood_cleansed",
+    "neighbourhood_group_cleansed",
     "room_type",
     ]
 
@@ -51,13 +51,13 @@ def main() -> None:
 
     export_counts(
         df,
-        "neighbourhood",
+        "neighbourhood_cleansed",
         "raw_listings_by_neighbourhood.csv"
     )
 
     export_counts(
         df,
-        "neighbourhood_group",
+        "neighbourhood_group_cleansed",
         "raw_listings_by_neighbourhood_group.csv"
     )
 
