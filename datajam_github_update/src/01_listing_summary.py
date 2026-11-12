@@ -35,26 +35,35 @@ def main() -> None:
     df = pd.read_csv(INPUT, low_memory=False)
     print(f"Rows: {len(df):,}")
     print(f"Columns: {len(df.columns):,}")
+    print ("Column names:")
+    print(df.columns.tolist())
 
     required = [
-        "neighbourhood_cleansed",
-        "property_type",
-        "room_type",
+    "neighbourhood",
+    "neighbourhood_group",
+    "room_type",
     ]
+
     missing = [column for column in required if column not in df.columns]
+
     if missing:
         raise ValueError(f"Missing expected columns: {missing}")
 
     export_counts(
-        df, "neighbourhood_cleansed",
+        df,
+        "neighbourhood",
         "raw_listings_by_neighbourhood.csv"
     )
+
     export_counts(
-        df, "property_type",
-        "raw_listings_by_property_type.csv"
+        df,
+        "neighbourhood_group",
+        "raw_listings_by_neighbourhood_group.csv"
     )
+
     export_counts(
-        df, "room_type",
+        df,
+        "room_type",
         "raw_listings_by_room_type.csv"
     )
 
