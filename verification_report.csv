@@ -1,0 +1,22 @@
+check,status,detail
+Files found,PASS,"listings.csv.gz, calendar.csv.gz, reviews.csv.gz"
+Detailed listings file (about 75 columns),PASS,90 columns
+Listings are in Vancouver (coordinates),PASS,"100.0% inside the Vancouver box; lat 49.20 to 49.29, lon -123.22 to -123.02"
+Neighbourhood count,PASS,"23 areas (Vancouver has 22 local planning areas, one file may merge or split slightly)"
+Listing count,PASS,"6,131 listings (brief expects about 5,000 to 6,000)"
+Snapshot date,WARN,"2026-09-17 to 2026-09-18 (the brief says 2026-06-15, say which date you used on a slide)"
+Duplicate listing ids,PASS,0 duplicates
+Price parsed to numbers,WARN,15.8% of listings have no price (dropped from the analysis)
+Price range,PASS,"min $28, median $273, max $10,000 (extreme prices are trimmed at P1 and P99)"
+Licence field filled,PASS,"82.1% have text; 60.7% show both city and provincial numbers (an estimate, not an official compliance rate)"
+Revenue and occupancy estimates,PASS,occupancy 0 to 255 nights; 15.8% missing revenue
+Share at the 255 night cap,WARN,"13.1% of all listings sit at the cap (the estimate cannot go higher, so top earners are understated)"
+Calendar covers about 365 days,PASS,2026-09-17 to 2027-09-17 (366 days)
+Calendar ids match listings,PASS,0.0% of calendar listing ids not found in listings
+Reviews ids match listings,PASS,0.0% of review listing ids not in listings; reviews run 2010-02-17 to 2026-09-17
+Reproduces our number: listings,PASS,"you got 6,131, we got 6,131"
+Reproduces our number: entire_homes,PASS,"you got 5,012, we got 5,012"
+Reproduces our number: analysis_set,PASS,"you got 2,702, we got 2,702"
+Reproduces our number: condos,PASS,"you got 1,030, we got 1,030"
+Reproduces our number: houses,PASS,"you got 1,000, we got 1,000"
+Reproduces our number: cost_13_condos,PASS,"you got 9,535,818, we got 9,535,818"
