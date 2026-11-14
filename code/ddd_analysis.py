@@ -27,7 +27,7 @@ STRATA = {'House': 0, 'Townhouse': 3780, 'Condo': 3780}          # $0.525/sq ft/
 INSURANCE = {'House': 3000, 'Townhouse': 2500, 'Condo': 2000}    # STR policies $2,200 to $3,200 in US examples (weakest evidence)
 LICENCE = 1108                                                  # City of Vancouver STR business licence per year (vancouver.ca)
 CLOSE = 4000                                                    # legal, title insurance, inspection, adjustments (worked example $3,850)
-VAR = 0.38        # platform 3% (Airbnb host only fee) + management 20% (middle of 15 to 25%) + utilities, supplies, maintenance 15%
+VAR = 0.505        # Airbnb host-only fee 15.5% + management 20% (middle of 15 to 25%) + utilities, supplies, maintenance 15%
 PTAX = 0.00336394 # City of Vancouver 2026 Class 1 residential total rate, $3.36394 per $1,000 (assumes assessed value = benchmark price)
 
 WEST_SIDE = {'Downtown', 'West End', 'Kitsilano', 'Fairview', 'South Cambie', 'Shaughnessy', 'Arbutus Ridge',
@@ -179,7 +179,10 @@ def location_evidence(l, a, seed=3):
             cost, noi = econ(s.rev.median(), seg, side)
             bs = [econ(np.median(rng.choice(s.rev.values, len(s))), seg, side)[1] / cost for _ in range(400)]
             rows.append(dict(neighbourhood=nb, type=seg, side=side, n=len(s), median_price_night=s.price_num.median(),
-                             median_occ_nights=s.occ.median(), median_rev=s.rev.median(), all_in_cost=cost,
+                             median_occ_nights=s.occ.median(), median_rev=s.rev.median(),
+                             rev_p25=s.rev.quantile(.25),
+                             rev_capped_mean=np.minimum(s.rev.values, np.percentile(s.rev.values, 95)).mean(),
+                             rev_p75=s.rev.quantile(.75), all_in_cost=cost,
                              net_yield=noi / cost, ci90_lo=np.percentile(bs, 5), ci90_hi=np.percentile(bs, 95)))
     L = pd.DataFrame(rows).merge(comp, left_on='neighbourhood', right_index=True, how='left')
     return L.sort_values('net_yield', ascending=False)

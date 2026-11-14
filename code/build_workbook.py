@@ -27,7 +27,7 @@ A=wb.create_sheet('Assumptions')
 A['A1']='Assumptions'; A['A1'].font=BOLD
 hdr(A,2,['Item','Value','Unit','Source / note'])
 rows=[('Budget',10000000,'$','DDD mandate (case brief)'),
-('Variable costs share of revenue',0.38,'% revenue','3% platform fee + 20% management + 15% utilities, supplies, maintenance. See Sources sheet, items 6 to 8'),
+('Variable costs share of revenue',0.505,'% revenue','15.5% Airbnb host-only fee + 20% management + 15% utilities, supplies, maintenance. See Sources sheet, items 6 to 8'),
 ('Property tax rate',0.00336394,'% of price','City of Vancouver 2026 Class 1 residential total rate $3.36394 per $1,000 (Sources item 9). Assumes assessed value equals benchmark price'),
 ('Condo strata fees',3780,'$/yr','$0.525 per sq ft per month (midpoint of Vancouver $0.35 to $0.70) x 600 sq ft x 12 (Sources item 10)'),
 ('Condo insurance',2000,'$/yr','Short term rental policy; US examples $2,200 to $3,200 for 3+ bedroom homes, so weakest evidence (Sources item 12)'),
@@ -55,9 +55,26 @@ P['A1']='Recommended portfolio: 13 condos'; P['A1'].font=BOLD
 cols=['Area','Type','Side','Units','Price per unit ($)','Transfer tax per unit ($)','Setup + closing per unit ($)','All in cost per unit ($)','Total cost ($)',
       'Rev per unit LOW (p25)','Rev per unit CONSERVATIVE (median)','Rev per unit BASE (capped mean)','Rev per unit HIGH (p75)','Fixed costs per unit ($/yr)','Listings in data (n)']
 hdr(P,3,cols)
-data=[('Downtown Eastside','Condo','East',6,30534,50940,54693,76908,189),
-      ('Downtown','Condo','West',5,34563,57838,61550,84710,580),
-      ('West End','Condo','West',2,31521,55350,63581,93618,43)]
+loc_rev = pd.read_csv('results/location_evidence.csv')
+selected = loc_rev[
+    (loc_rev['type'] == 'Condo') &
+    (loc_rev['neighbourhood'].isin(['Downtown Eastside', 'Downtown', 'West End']))
+].set_index('neighbourhood')
+
+data = []
+for nm, side, units in [
+    ('Downtown Eastside', 'East', 6),
+    ('Downtown', 'West', 5),
+    ('West End', 'West', 2)
+]:
+    if nm not in selected.index:
+        raise ValueError(f'Missing condo evidence for {nm}')
+    r = selected.loc[nm]
+    data.append((
+        nm, 'Condo', side, units,
+        r['rev_p25'], r['median_rev'],
+        r['rev_capped_mean'], r['rev_p75'], int(r['n'])
+    ))
 for i,(nm,ty,sd,u,lo,md,bs,hi,n) in enumerate(data,4):
     P.cell(row=i,column=1,value=nm).font=BLK; P.cell(row=i,column=2,value=ty).font=BLK; P.cell(row=i,column=3,value=sd).font=BLK
     P.cell(row=i,column=4,value=u).font=BLUE
@@ -85,7 +102,7 @@ for r,(nm,col) in enumerate([('Low (p25)','J'),('Conservative (median)','K'),('B
     P.cell(row=r,column=8,value="=Assumptions!$B$11*SUMPRODUCT($D$4:$D$6,$E$4:$E$6)").font=GRN
     P.cell(row=r,column=9,value=f"=E{r}-F{r}-G{r}-H{r}").font=BLK
     P.cell(row=r,column=10,value=f"=I{r}/$I$7").font=BLK
-P['A18']='Note: portfolio level P10 to P90 range from simulating random listings (base case 4.0%, range 3.0% to 5.2%) is in Alternatives. Spreadsheet scenarios are per listing percentiles applied to every unit, so they are wider than a diversified portfolio would realistically be.'
+P['A18']='Note: portfolio level P10 to P90 range from simulating random listings (base case 2.7%, range 1.9% to 3.5%) is in Alternatives. Spreadsheet scenarios are per listing percentiles applied to every unit, so they are wider than a diversified portfolio would realistically be.'
 P['A18'].font=BLK
 for r in range(4,10):
     for c in (5,6,7,8,9,10,11,12,13,14): P.cell(row=r,column=c).number_format='$#,##0'
@@ -103,23 +120,23 @@ def put(df,name,note):
             x=s.cell(row=r,column=c,value=(round(v,4) if isinstance(v,float) else v)); x.font=BLUE
     for i in range(1,len(df.columns)+1): s.column_dimensions[get_column_letter(i)].width=20
     return s
-alt=pd.read_csv('property_type_comparison.csv').rename(columns={'seg':'type'})
+alt=pd.read_csv('results/property_type_comparison.csv').rename(columns={'seg':'type'})
 s=put(alt,'Alternatives','Property type comparison (data: Inside Airbnb + REBGV benchmarks; script 06). yld = net yield on all in cost')
 n=len(alt)+6
 s.cell(row=n,column=1,value='How many properties: yield spread vs number of condos (same $10M area mix, script 06)').font=BOLD
-hm=pd.read_csv('how_many_vs_spread.csv')
+hm=pd.read_csv('results/how_many_vs_spread.csv')
 for c,v in enumerate(hm.columns,1):
     x=s.cell(row=n+1,column=c,value=v); x.font=BOLD; x.fill=HDR
 for r,row in enumerate(hm.itertuples(index=False),n+2):
     for c,v in enumerate(row,1): s.cell(row=r,column=c,value=round(float(v),4)).font=BLUE
-pc=pd.read_csv('portfolio_compare.csv')[['portfolio','props','deployed','rev_p50','noi_p50','yld_p10','yld_p50','yld_p90']]
+pc=pd.read_csv('results/portfolio_compare.csv')[['portfolio','props','deployed','rev_p50','noi_p50','yld_p10','yld_p50','yld_p90']]
 m=n+len(hm)+4
 s.cell(row=m,column=1,value='Portfolio comparison (script 05): few high value vs many condos').font=BOLD
 for c,v in enumerate(pc.columns,1):
     x=s.cell(row=m+1,column=c,value=v); x.font=BOLD; x.fill=HDR
 for r,row in enumerate(pc.itertuples(index=False),m+2):
     for c,v in enumerate(row,1): s.cell(row=r,column=c,value=(round(v,4) if isinstance(v,float) else v)).font=BLUE
-loc=pd.read_csv('location_evidence.csv'); put(loc,'Location_evidence','Neighbourhood evidence by type (script 07). n = listings in cleaned analysis set; full_lic_share = estimated share of short stay entire homes showing both city and provincial licence numbers')
+loc=pd.read_csv('results/location_evidence.csv'); put(loc,'Location_evidence','Neighbourhood evidence by type (script 07). n = listings in cleaned analysis set; full_lic_share = estimated share of short stay entire homes showing both city and provincial licence numbers')
 seas=pd.DataFrame({'month':['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],'review_index':[.53,.60,.74,.86,1.38,1.47,1.72,1.89,1.00,.74,.53,.54]})
 put(seas,'Seasonality','Monthly demand index from review dates 2023 to Aug 2026 for the analysis set (1.0 = average month). Use to phase 2027 revenue by month')
 
@@ -132,7 +149,7 @@ items=[
 (3,'BC property transfer tax brackets','1% to $200k, 2% to $2M, 3% to $3M, 5% above $3M residential','Government of BC','https://www2.gov.bc.ca/gov/content/taxes/property-taxes/property-transfer-tax','Strong (official)'),
 (4,'City of Vancouver Empty Homes Tax','3% of assessed value; exempt only if rented 6+ months in periods of 30+ consecutive days','City of Vancouver','https://vancouver.ca/home-property-development/will-your-home-be-taxed.aspx','Strong (official). Some sites say 5%; the City page says 3%. Check 2027 rate'),
 (5,'City of Vancouver STR business licence fee','$1,108 per year plus $77 application','City of Vancouver','https://vancouver.ca/doing-business/short-term-rental-business-licence-requirements.aspx','Strong (official)'),
-(6,'Airbnb host fee','3% host only fee (split fee model)','Vancouver STR management blog citing Airbnb fee structure','https://cincinyvrcohost.vercel.app/blog/airbnb-property-management-cost','Medium (vendor blog; confirm on Airbnb help centre)'),
+(6,'Airbnb host fee','15.5% host-only fee assumption for applicable software-connected host structure','Airbnb, How much does Airbnb charge hosts?','https://www.airbnb.com/resources/hosting-homes/a/how-much-does-airbnb-charge-hosts-288','Verify applicable account fee and 2027 fee structure before acquisition'),
 (7,'Management fee','20% (midpoint of 15% to 25%)','AirDNA 2025 report as cited by rentalrealestate.com: 15% to 25%, most near 20% to 25%; Vancouver managers: co-host 15% to 25%, full service 20% to 25%; MasterHost Metro Vancouver 15%','https://rentalrealestate.com/blog/vacation-rental-property-management-fees-explained-costs-percentages-red-flags/ ; https://cincinyvrcohost.vercel.app/blog/cost-of-property-management ; https://masterhost.ca/?p=58182','Medium to good (several independent sources agree)'),
 (8,'Utilities, supplies, maintenance','15% of revenue','AirDNA based expense breakdowns (US, 3 bedroom homes): utilities 6% to 17%, supplies 2% to 7%, maintenance 6% to 13%. Whole STR operating costs 30% to 70% of revenue','https://theshorttermshop.com/blue-ridge-short-term-rental-income/ ; https://awning.com/post/airbnb-profit-margin-benchmarks-2026-what-good-really-looks-like-by-market-type','Medium (US data, larger homes). Not Vancouver specific'),
 (9,'Vancouver 2026 residential property tax rate','0.336394% of assessed value ($3.36394 per $1,000)','City of Vancouver council 2026 rate documents (school 0.98001, TransLink 0.35860, BC Assessment 0.03814, MFA 0.00020 per $1,000) and a published rate table','https://council.vancouver.ca/20260505/documents/a3.pdf ; https://catax.tools/property-tax-vancouver/','Good'),
@@ -147,4 +164,4 @@ for r,row in enumerate(items,4):
         x=S.cell(row=r,column=c,value=v); x.font=BLK; x.alignment=Alignment(wrap_text=True,vertical='top')
 for col,w in zip('ABCDEF',(5,38,45,70,70,40)): S.column_dimensions[col].width=w
 
-wb.save('DDD_handoff_workbook.xlsx')
+wb.save('workbook/DDD_handoff_workbook.xlsx')
