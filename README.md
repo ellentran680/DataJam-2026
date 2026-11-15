@@ -52,7 +52,7 @@ Other assumptions, including property taxes, strata fees, insurance, furnishing,
 
 The base-case yield is lower than the earlier 3.7% estimate because the updated model uses the 50.5% variable-cost assumption.
 
-## 6. Key results
+## 3. Key results
 
 Recommended portfolio: 13 condos:
 - 6 Downtown Eastside
@@ -69,7 +69,7 @@ Neighbourhood median net yields:
 - Downtown: approximately 2.4%
 - West End: approximately 2.2%
 
-## 8. Limitations and responsible use
+## 4. Limitations and responsible use
 
 Airbnb estimated revenue is not audited income. Calendar-unavailable dates may represent bookings or host blocks, and reviews are an imperfect proxy for completed stays.
 
@@ -81,6 +81,3 @@ The principal-residence requirement is set aside for this hypothetical simulatio
 
 Before an actual acquisition, independently verify licensing, provincial registration, strata restrictions, fees, taxes, and operating costs.
 
-## 9. AI use
-
-AI tools assisted with project development and analysis. The included Python scripts, CSV outputs, and workbook provide a calculation trail for the reproducible portions of the project. Figures should be independently checked before being relied upon.
