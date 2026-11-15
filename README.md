@@ -52,15 +52,4 @@ Other assumptions, including property taxes, strata fees, insurance, furnishing,
 
 The base-case yield is lower than the earlier 3.7% estimate because the updated model uses the 50.5% variable-cost assumption.
 
-## 4. Limitations and responsible use
-
-Airbnb estimated revenue is not audited income. Calendar-unavailable dates may represent bookings or host blocks, and reviews are an imperfect proxy for completed stays.
-
-The case brief specifies a June 15, 2026 data snapshot. The available dataset is dated September 17–18, 2026. This discrepancy should be considered when interpreting the results.
-
-The model assumes 50.5% variable costs: a 15.5% Airbnb host-fee assumption, 20% management, and 15% utilities, supplies, and maintenance. Actual fees and operating costs may differ.
-
-The principal-residence requirement is set aside for this hypothetical simulation. This does not establish legal eligibility for any real property.
-
-Before an actual acquisition, independently verify licensing, provincial registration, strata restrictions, fees, taxes, and operating costs.
 
