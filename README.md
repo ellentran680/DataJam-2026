@@ -52,60 +52,6 @@ Other assumptions, including property taxes, strata fees, insurance, furnishing,
 
 The base-case yield is lower than the earlier 3.7% estimate because the updated model uses the 50.5% variable-cost assumption.
 
-## 3. Repository structure
-
-```text
-.
-├── code/
-│   ├── ddd_analysis.py
-│   ├── make_charts.py
-│   └── build_workbook.py
-├── results/
-│   ├── location_evidence.csv
-│   ├── portfolio_compare.csv
-│   ├── property_type_comparison.csv
-│   ├── scenarios.csv
-│   └── other analysis CSV files
-├── charts/
-│   ├── chart_location_condo_yield.png
-│   ├── chart_type_yield.png
-├── workbook/
-│   └── DDD_handoff_workbook.xlsx
-├── listings.csv.gz
-├── calendar.csv.gz
-├── reviews.csv.gz
-├── neighbourhoods.geojson
-├── requirements.txt
-└── README.md
-
-## 4. Reproduce the analysis
-
-Python 3 is required. Install dependencies using:
-
-Mac: `python3 -m venv .venv`, `source .venv/bin/activate`, then `python -m pip install -r requirements.txt`.
-
-Windows: `python -m venv .venv`, `.venv\Scripts\activate`, then `python -m pip install -r requirements.txt`.
-
-Keep the compressed CSV files in the repository root. Do not unzip them.
-
-Run the main analysis:
-
-`python code/ddd_analysis.py --data-dir . --out-dir results`
-
-Generate the main charts:
-
-`python code/make_charts.py results charts`
-
-Generate the Excel workbook:
-
-`python code/build_workbook.py`
-
-The workbook is saved to `workbook/DDD_handoff_workbook.xlsx`.
-
-## 5. Reproducibility limitation
-
-Part 3 sensitivity and monthly charts are excluded because their original analysis script and supporting CSV files are not included.
-
 ## 6. Key results
 
 Recommended portfolio: 13 condos:
@@ -122,25 +68,6 @@ Neighbourhood median net yields:
 - Downtown Eastside: approximately 2.5%
 - Downtown: approximately 2.4%
 - West End: approximately 2.2%
-
-These are model estimates, not guaranteed returns.
-
-## 7. Main evidence files
-
-| File | Purpose |
-|---|---|
-| `code/ddd_analysis.py` | Main analysis and calculations |
-| `code/build_workbook.py` | Excel workbook generation |
-| `code/make_charts.py` | Main chart generation |
-| `results/decision1_filter_steps.csv` | Data filtering decisions |
-| `results/validation_checks.csv` | Data validation |
-| `results/location_evidence.csv` | Neighbourhood evidence |
-| `results/property_type_comparison.csv` | Property-type comparison |
-| `results/how_many_vs_spread.csv` | Portfolio size and diversification |
-| `results/portfolio_compare.csv` | Portfolio comparison |
-| `results/scenarios.csv` | Financial stress scenarios |
-| `results/seasonality.csv` | Monthly demand patterns |
-| `workbook/DDD_handoff_workbook.xlsx` | Assumptions and financial calculations |
 
 ## 8. Limitations and responsible use
 
