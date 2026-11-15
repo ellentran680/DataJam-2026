@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 # ----------------------------------------------------------------------------------------
-# 1. ASSUMPTIONS (edit here). Each line says where it comes from.
+# 1. ASSUMPTIONS
 # ----------------------------------------------------------------------------------------
 # Benchmark prices, Aug 2026 (REBGV area benchmarks as reported by Nest Presales; Metro figures match GVR stats)
 PRICE = {('West', 'House'): 2932700, ('East', 'House'): 1621400,
