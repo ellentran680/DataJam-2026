@@ -52,23 +52,6 @@ Other assumptions, including property taxes, strata fees, insurance, furnishing,
 
 The base-case yield is lower than the earlier 3.7% estimate because the updated model uses the 50.5% variable-cost assumption.
 
-## 3. Key results
-
-Recommended portfolio: 13 condos:
-- 6 Downtown Eastside
-- 5 Downtown
-- 2 West End
-
-Total all-in cost: $9,535,818.
-Unspent budget: $464,182.
-Base-case median net yield: 2.7%.
-Simulated P10–P90 yield range: 1.9%–3.5%.
-
-Neighbourhood median net yields:
-- Downtown Eastside: approximately 2.5%
-- Downtown: approximately 2.4%
-- West End: approximately 2.2%
-
 ## 4. Limitations and responsible use
 
 Airbnb estimated revenue is not audited income. Calendar-unavailable dates may represent bookings or host blocks, and reviews are an imperfect proxy for completed stays.
